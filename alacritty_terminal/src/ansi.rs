@@ -53,6 +53,18 @@ fn parse_rgb_color(color: &[u8]) -> Option<Rgb> {
         }};
     }
 
+    macro_rules! parse_delim {
+        () => {{
+            let val = next!();
+            if val != Some('/') {
+                next!();
+                next!()
+            } else {
+                val
+            }
+        }};
+    }
+
     match next!() {
         Some('r') => {
             if next!() != Some('g') {
@@ -66,12 +78,11 @@ fn parse_rgb_color(color: &[u8]) -> Option<Rgb> {
             }
 
             let r = parse_hex!();
-            let val = next!();
-            if val != Some('/') {
+            if parse_delim!() != Some('/') {
                 return None;
             }
             let g = parse_hex!();
-            if next!() != Some('/') {
+            if parse_delim!() != Some('/') {
                 return None;
             }
             let b = parse_hex!();
